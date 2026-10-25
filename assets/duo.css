@@ -1,0 +1,38 @@
+/* Real hardware skin: Apple iPhone Duo product-viewer landscape image.
+   Source: https://www.apple.com/v/iphone-duo/e/images/overview/product-viewer/landscape__f7x2oe1oxemy_large.jpg */
+.duo{margin:24px 0 18px;color:var(--text)}
+.duo-stage{position:relative;aspect-ratio:1.4;perspective:1600px;overflow:hidden;isolation:isolate;background:radial-gradient(ellipse at 50% 65%,#b498d018,transparent 68%)}
+.duo-device{position:absolute;inset:0;width:100%;height:100%;transform:scale(.56) translateX(25%) rotateX(5deg) rotateY(-7deg);transform-style:preserve-3d;transition:transform 1.8s cubic-bezier(.22,.75,.15,1)}
+.duo-panel{position:absolute;inset:0 50% 0 0;border-radius:16% / 11%;overflow:hidden;background:#161519;backface-visibility:hidden;transition:border-radius 1.8s}
+.duo-panel::before{content:'';position:absolute;inset:0 auto 0 0;width:200%;height:100%;background-image:url('/caijix/assets/duo-hardware.jpg');background-size:198.35% 146.99%;background-position:84.03% 50.2%;pointer-events:none}
+.duo-panel:not(.duo-wing)::before{width:100%;background-image:url('/caijix/assets/duo-cover.jpg');background-size:366.41% 138.18%;background-position:64.37% 50.48%}
+.duo-glass{position:absolute;inset:2.7% 3.8% 2.7% 3.8%;overflow:hidden;border-radius:13% / 9%;background:#100e16;transition:border-radius 1.8s,inset 1.8s}
+.duo-glass::after{content:'';position:absolute;inset:0;pointer-events:none;background:linear-gradient(125deg,#fff1,transparent 27%,transparent 80%,#b69cc509)}
+.duo video{display:block;width:200%;max-width:none;height:100%;object-fit:cover}
+.duo-wing{inset:0 0 0 50%;border-radius:0 16% 16% 0 / 0 11% 11% 0;transform-origin:left center;transform:rotateY(-180deg);transition:transform 1.8s cubic-bezier(.22,.75,.15,1)}
+.duo-wing::before{left:-100%}
+.duo-wing .duo-glass{inset:2.7% 3.8% 2.7% -.5px;border-radius:0 13% 13% 0 / 0 9% 9% 0}
+.duo-wing canvas{display:block;width:100%;height:100%}
+.duo-camera{position:absolute;left:43%;top:7%;width:2.3%;aspect-ratio:1;border-radius:50%;background:radial-gradient(circle at 40% 40%,#252b45,#030305 65%);box-shadow:0 0 0 2px #08080c;transition:opacity .3s;pointer-events:none}
+.duo-hinge{position:absolute;left:calc(50% - 2px);top:2.5%;bottom:2.5%;width:4px;background:linear-gradient(90deg,#26232b,#b7abbf,#39333e);transform:translateZ(2px);pointer-events:none;transition:opacity .2s;opacity:.8}
+.duo-open .duo-wing{transform:rotateY(0)}
+.duo-open .duo-panel:not(.duo-wing){border-radius:16% 0 0 16% / 11% 0 0 11%}
+.duo-open .duo-panel:not(.duo-wing)::before{width:200%;background-image:url('/caijix/assets/duo-hardware.jpg');background-size:198.35% 146.99%;background-position:84.03% 50.2%}
+.duo-open .duo-panel:not(.duo-wing) .duo-glass{right:-.5px;border-radius:13% 0 0 13% / 9% 0 0 9%}
+.duo-open .duo-camera{opacity:0}
+.duo-open .duo-hinge{opacity:0;transition-delay:1.55s}
+.duo-open .duo-device{animation:duo-approach 7.8s cubic-bezier(.2,.65,.2,1) both}
+@keyframes duo-approach{
+  0%{transform:scale(.56) translateX(25%) rotateX(5deg) rotateY(-7deg)}
+  23.08%{transform:scale(.56) translateX(0) rotateX(3deg) rotateY(0)}
+  100%{transform:scale(.98) translateX(0) rotateX(0) rotateY(0)}
+}
+.duo-caption{margin:12px 0 0;font-size:15px;line-height:1.65;text-align:center;overflow-wrap:anywhere}
+.duo-caption a{color:var(--text);text-decoration:none}
+.duo-caption a:hover{text-decoration:underline;color:var(--glow)}
+.duo-controls{display:flex;justify-content:center;align-items:center;flex-wrap:wrap;gap:10px;margin-top:10px;font-size:12px;color:var(--muted)}
+.duo-controls button{font:inherit;color:var(--text);background:#24202c;border:1px solid var(--line-2);border-radius:20px;padding:7px 13px;cursor:pointer;min-height:36px}
+.duo :focus-visible{outline:2px solid var(--glow);outline-offset:4px}
+.duo-status{text-align:center;font-size:12px;color:var(--muted);min-height:1.5em;margin-top:8px}
+@media(max-width:760px){.duo-caption{font-size:13px}.duo{margin-top:16px}}
+@media(prefers-reduced-motion:reduce){.duo-device,.duo-panel,.duo-glass,.duo-camera,.duo-hinge{transition:none!important}.duo-open .duo-device{animation:none;transform:scale(.98)}.duo-open .duo-hinge{opacity:0}}
