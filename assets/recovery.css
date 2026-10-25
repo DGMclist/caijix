@@ -7,6 +7,6 @@
 /* Owner branding: text-only header, compact GPT. badges and a complete contact image with a small QR overlay. */
 .brand>svg{display:none}.brand{gap:0}
 .grade,.heads li.head .grade,.h-text .grade{width:32px;min-width:32px;height:32px;padding:0 3px;border-radius:8px;font-size:9px;line-height:1;white-space:nowrap}
-.heads li.head{grid-template-columns:32px 1fr}.h-text{grid-template-columns:32px minmax(0,1fr);gap:12px}
+.heads li.head{grid-template-columns:32px 1fr}.heads li.head:not(.has-media){grid-template-columns:minmax(0,1fr)}.h-text{grid-template-columns:32px minmax(0,1fr);gap:12px}
 .owner-footer{padding:28px 0;scroll-margin-top:calc(var(--top) + 16px)}.owner-footer .footer-in{justify-content:center}.owner-contact{position:relative;width:min(100%,520px);margin:0 auto;line-height:0}.owner-contact-image{display:block;width:100%;height:auto;aspect-ratio:1055/1491;object-fit:contain;border-radius:14px}.owner-contact .owner-qr{position:absolute;right:12px;bottom:12px;box-sizing:border-box;width:clamp(56px,16vw,76px);height:clamp(56px,16vw,76px);padding:4px;background:#fff;border-radius:7px;box-shadow:0 3px 16px #0008}
 @media(max-width:760px){.h-text{grid-template-columns:28px minmax(0,1fr);gap:10px}.grade,.heads li.head .grade,.h-text .grade{width:28px;min-width:28px;height:28px;padding:0 2px;border-radius:7px;font-size:8px}.owner-footer{padding:20px 0}.owner-contact{width:100%}.owner-contact-image{border-radius:10px}.owner-contact .owner-qr{right:9px;bottom:9px;padding:3px}}
