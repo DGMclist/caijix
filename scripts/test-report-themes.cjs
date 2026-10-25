@@ -17,7 +17,13 @@ const server = http.createServer((req, res) => {
   if (!path.resolve(root, file).startsWith(root + path.sep)) { res.writeHead(403).end(); return; }
   try {
     let content = url.searchParams.has('baseline') ? original(file) : fs.readFileSync(path.join(root, file));
-    if (file.endsWith('.html') && url.searchParams.has('day')) content = content.toString().replace(/(<meta name="report-date" content=")[^"]*/, '$1' + url.searchParams.get('day'));
+    if (file.endsWith('.html') && url.searchParams.has('day')) {
+      const day = url.searchParams.get('day');
+      content = content.toString().replace(/(<meta name="report-date" content=")[^"]*/, '$1' + day)
+        .replace(/(<script\b[^>]*id="share-data"[^>]*>)([\s\S]*?)(<\/script>)/, (_, open, json, close) => {
+          const report = JSON.parse(json); report.meta.day = day; return open + JSON.stringify(report) + close;
+        }).replace(/<link\b(?=[^>]*rel="canonical")[^>]*>/, tag => tag.replace(/\/radar\/\d{4}-\d{2}-\d{2}\//, '/radar/' + day + '/'));
+    }
     res.setHeader('Content-Type', file.endsWith('.html') ? 'text/html; charset=utf-8' : file.endsWith('.css') ? 'text/css' : file.endsWith('.js') ? 'text/javascript' : 'application/octet-stream');
     res.end(content);
   } catch { res.writeHead(404).end(); }
@@ -52,7 +58,7 @@ async function snapshot(page) {
         const u = new URL(route.request().url());
         if (route.request().resourceType() === 'image' && u.origin !== new URL(base).origin) return route.fulfill({contentType:'image/png',body:Buffer.from('iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+jRZkAAAAASUVORK5CYII=','base64')});
         if (u.origin !== new URL(base).origin) return route.abort();
-        if (u.pathname.endsWith('.css') && new URL(page.url()).searchParams.has('baseline')) u.searchParams.set('baseline', '1');
+        if (/\.(css|js)$/.test(u.pathname) && new URL(page.url()).searchParams.has('baseline')) u.searchParams.set('baseline', '1');
         return route.continue({ url: u.href });
       });
       await page.goto(base + '?baseline=1');

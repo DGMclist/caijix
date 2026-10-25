@@ -1,47 +1,30 @@
-# Report publication themes
+# Automatic report publication themes
 
-Based on the approved foldable-phone version at `afda9c1`. Theme review controls and standalone preview pages are not part of the published source.
+The existing report template already loads `assets/site.js` and `assets/style.css`. Theme runtime and theme CSS are now bundled into these two existing assets. A newly generated report works even if the generator does not emit the three dedicated theme head tags. No per-report manual preparation command is required for normal HTML-only generation.
 
 ## Date contract
 
-This public repository contains generated static HTML, not the report generator or a deployment workflow. Existing `share-data` JSON contains `meta.day` (YYYY-MM-DD); each report's canonical URL and visible TODAY date agree with it. The root and `/radar/` are copies of the latest issue, not reports for the visitor's current day.
+At page initialization, the existing `share-data` JSON's `meta.day` is authoritative. The optional `meta[name=report-date]` is an early-render hint used before report JSON is available. At deferred initialization, actual report data wins over a stale head hint. Dates are strictly validated as YYYY-MM-DD with UTC weekday arithmetic. A dated canonical URL, when present, must agree. Invalid/corrupt report data or a conflicting canonical date falls back to the original purple. No visitor clock, timezone, file timestamp or fabricated report date is used.
 
-`node scripts/prepare-report-themes.cjs` validates publisher `meta.day` against the canonical issue URL, then adds `meta[name=report-date]` and the shared theme assets to all five HTML pages. It is idempotent and validates all pages before writing. An invalid date or a conflicting canonical URL stops preparation. It never derives publication date from system time, Git history, file timestamps or visitor timezone.
+A report dated 2026-10-25 remains Sunday's mint even if opened on Monday. A newly generated report dated 2026-10-26 uses Monday's blue.
 
-The smallest ongoing integration is to run that command after HTML generation and before publishing. Alternatively, have the external generator emit the same three head elements directly using its issue publication day. This external producer is not available in the public repository and has not been changed. A publisher that overwrites HTML without this integration will remove the theme hooks.
+## Colors and behavior
 
-Runtime uses UTC weekday arithmetic on the explicit date-only publication field. Monday #4568FF; Tuesday #FF7138; Wednesday #F45BAA; Thursday #C8F169; Friday #C47C60; Saturday inherits the existing purple page accents including #b48ae5/#8350bb/#693998/#462064; Sunday #72F5D0. Missing/invalid metadata or disabled JavaScript preserves the original purple. New reports need a real publication day, not a collection-window or next-scheduled-run date.
+Monday #4568FF; Tuesday #FF7138; Wednesday #F45BAA; Thursday #C8F169; Friday #C47C60; Saturday retains the original purple page accents; Sunday #72F5D0. GPT. and A badges use lighter tonal gradients in each day's hue, including softer purple on Saturday. Original dimensions, text, layout, dark background, video playback and folding logic remain intact.
 
-## Scope
+## Source maintenance
 
-Colors affect existing accent variables, translucent decorative gradients, border and hover effects, phone edge shadow, heading underlines and data highlights. GPT. and A badges use lighter tonal gradients derived from each day's accent, including a softer purple on Saturday. Their lettering, dimensions and positions remain unchanged. Text/font/layout and the dark neutral background stops are unchanged. Phone transforms, timing, source selection, media events, share rendering and navigation code are unchanged. Hardware photography remains unchanged.
+- `assets/report-theme.js` is the authoritative theme runtime.
+- `assets/report-theme.css` is the authoritative theme-specific CSS.
+- `node scripts/install-report-theme-assets.cjs` updates the bounded, clearly marked theme blocks in the existing site.js and style.css. Run this when changing theme source or rebuilding shared assets, not once per report.
+- `node scripts/prepare-report-themes.cjs` is an optional publisher validation/early-render optimization: it validates all reports, installs shared theme blocks and writes the three head hints. The runtime fallback makes those hints optional.
 
-Native video controls receive CSS `accent-color`. Native progress bar rendering is controlled by the browser and is not guaranteed to adopt this value on every browser, especially iOS. Embedded platform players cannot be recolored from this page. No replacement player or new playback controls were introduced.
-
-## Changed files
-
-- `assets/style.css`: existing purple translucent effects use a theme RGB variable with their exact original values as fallbacks.
-- `assets/report-theme.js`: strict publication date validation and weekday tokens; synchronous head execution avoids an initial purple flash.
-- `assets/report-theme.css`: paint-only phone, title, data and interaction effects.
-- `index.html`, `radar/index.html`, `radar/2026-10-23/index.html`, `radar/2026-10-24/index.html`, `radar/2026-10-25/index.html`: only three head entries added; body content untouched.
-- `scripts/prepare-report-themes.cjs`: publisher integration.
-- `scripts/test-report-themes.cjs`: repeatable browser regression checks.
-- `THEME-INTEGRATION.md`: integration, verification and deployment notes.
+The public repository does not include the external report generator. That generator has not been modified or claimed to be modified. Instead, automatic date integration is implemented inside the existing website entry points, and tested against generated HTML with all dedicated theme tags removed. Shared assets must be deployed from the updated repository, as with any website change.
 
 ## Verification
 
-Run `node scripts/prepare-report-themes.cjs`, then `node scripts/test-report-themes.cjs` with Playwright installed and Microsoft Edge available. Set `PLAYWRIGHT_MODULE` to a module location if needed; `THEME_TEST_OUTPUT` chooses the screenshots/evidence folder.
+`node scripts/test-report-badges.cjs`: seven palettes, valid and invalid dates, original Saturday page accents, badge text contrast (minimum 5.90:1).
 
-Run `node scripts/test-report-badges.cjs` for dependency-free palette and contrast checks. Browser regression comparisons use the approved pre-theme commit `afda9c1` as their baseline; override with `THEME_BASELINE_REF` when deliberately updating that baseline.
+`node scripts/test-report-theme-autowire.cjs`: all seven weekdays and all five reports without dedicated theme tags; stale metadata; invalid/corrupt/conflicting dates; return to original Saturday accents; shared runtime/CSS inclusion; idempotent asset installer.
 
-Tests compare all seven themes against the published baseline at 1440, 390 and 320 pixels. The existing random video shuffle is held constant. External thumbnail images use a fixture; local hardware and media images remain real. Tests assert exact theme tokens, unchanged text, link targets, measured heading/statistics/media positions, white body text, no horizontal overflow and unchanged Saturday gradients. Five actual pages are checked in three timezones. Invalid/missing dates fall back to purple.
-
-A browser-encoded local WebM tests real decoded playback, five-second fold opening, continuous video, pause/resume, sound toggle, inline media handoff, close controls and embedded-player creation. Third-party media availability is not certified by this fixture. Browser coverage is desktop Chromium/Edge with mobile viewport emulation, not physical iOS/Android devices.
-
-## Deployment after approval
-
-1. Review this change against the latest `gh-pages`; preserve any newer report or animation changes.
-2. Add the preparation step to the external publisher (or add the three head elements to its template). Run preparation after each report generation.
-3. Run the checks above and inspect screenshots.
-4. Only after explicit approval, commit the reviewed files and push to `gh-pages` using the site's existing GitHub Pages publishing setup. This implementation has not changed Pages settings.
-5. Verify the live root and `/radar/` show the latest issue's weekday, old dated URLs retain their own colors, all new assets load and the phone/player still work.
+The existing optional browser regression script remains `scripts/test-report-themes.cjs`, with baseline commit afda9c1f405d5a882c2a4ab38642a4fa052d86d8 (override via THEME_BASELINE_REF). It requires Playwright and Microsoft Edge. Its date fixtures now update report data and canonical URL together, matching the stricter publication date contract. Browser tests have not been rerun for this integration update; deterministic source/date integration checks have been run.

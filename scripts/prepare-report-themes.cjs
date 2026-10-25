@@ -27,5 +27,6 @@ const updates = walk(root).map(file => {
     .replace('</head>', '<link href="/caijix/assets/report-theme.css" rel="stylesheet"/>\n</head>');
   return [file, html];
 });
+require('./install-report-theme-assets.cjs');
 for (const [file, html] of updates) fs.writeFileSync(file, html);
 console.log(`Prepared ${updates.length} report pages from publisher meta.day.`);

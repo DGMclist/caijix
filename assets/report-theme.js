@@ -1,10 +1,24 @@
-/* Publication date, never the visitor's clock. Run in <head> before styles. */
+/* Publication date, never the visitor's clock. Also bundled in the existing site.js. */
 (() => {
   const root = document.documentElement;
-  const value = document.querySelector('meta[name="report-date"]')?.content;
+  const owned = ['--glow', '--glow-2', '--brand', '--deep', '--warm', '--hot', '--violet',
+    '--theme-rgb', '--line', '--line-2', '--badge-top', '--badge-bottom',
+    '--badge-a-top', '--badge-a-bottom', '--badge-rgb'];
+  for (const key of owned) root.style.removeProperty?.(key);
+  delete root.dataset.reportTheme;
+  delete root.dataset.reportDate;
+  let value = document.querySelector('meta[name="report-date"]')?.content;
+  const report = document.getElementById?.('share-data');
+  // The existing generated report already contains meta.day. No new head tags required.
+  if (report) {
+    try { value = JSON.parse(report.textContent).meta?.day; } catch { return; }
+  }
   if (!/^\d{4}-\d{2}-\d{2}$/.test(value || '')) return;
   const date = new Date(value + 'T00:00:00Z');
   if (!Number.isFinite(date.getTime()) || date.toISOString().slice(0, 10) !== value) return;
+  const canonical = document.querySelector('link[rel="canonical"]')?.getAttribute?.('href');
+  const canonicalDay = canonical?.match(/\/radar\/(\d{4}-\d{2}-\d{2})\//)?.[1];
+  if (canonicalDay && canonicalDay !== value) return;
   const themes = [
     ['sunday', '#72F5D0'], ['monday', '#4568FF'],
     ['tuesday', '#FF7138'], ['wednesday', '#F45BAA'],
