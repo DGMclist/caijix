@@ -1,0 +1,12 @@
+/* Recovery controls appear only after media failure or while playing. Resting layout stays identical. */
+.cover-note{position:absolute;left:12px;bottom:10px;right:12px;color:#c8bfd4;font:12px/1.5 var(--sans);text-align:left;pointer-events:none}.cover-unavailable{background:linear-gradient(135deg,#28232f,#1c1c21)}.player-close{position:absolute;right:8px;top:8px;z-index:3;width:32px;height:32px;display:grid;place-items:center;background:#201b29e8;color:#f2eef8;border:1px solid #b48ae580;border-radius:50%;font:22px/1 var(--sans);cursor:pointer}.media-error{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:center;align-items:center;gap:10px;background:#24202b;color:#c8bfd4;font:13px/1.6 var(--sans);padding:20px;text-align:center}.media-error a{color:#cfb0f2;text-decoration:underline}
+
+/* The reference overflows at 320px in three topic headers. Repair only this narrow breakpoint. */
+@media(max-width:360px){.rtopic header{flex-wrap:wrap}.rtopic header h3{min-width:0}.rtopic header .kind-tag{margin-left:0}}
+
+/* Owner branding: text-only header, compact GPT. badges and a complete contact image with a small QR overlay. */
+.brand>svg{display:none}.brand{gap:0}
+.grade,.heads li.head .grade,.h-text .grade{width:32px;min-width:32px;height:32px;padding:0 3px;border-radius:8px;font-size:9px;line-height:1;white-space:nowrap}
+.heads li.head{grid-template-columns:32px 1fr}.h-text{grid-template-columns:32px minmax(0,1fr);gap:12px}
+.owner-footer{padding:28px 0;scroll-margin-top:calc(var(--top) + 16px)}.owner-footer .footer-in{justify-content:center}.owner-contact{position:relative;width:min(100%,520px);margin:0 auto;line-height:0}.owner-contact-image{display:block;width:100%;height:auto;aspect-ratio:1055/1491;object-fit:contain;border-radius:14px}.owner-contact .owner-qr{position:absolute;right:12px;bottom:12px;box-sizing:border-box;width:clamp(56px,16vw,76px);height:clamp(56px,16vw,76px);padding:4px;background:#fff;border-radius:7px;box-shadow:0 3px 16px #0008}
+@media(max-width:760px){.h-text{grid-template-columns:28px minmax(0,1fr);gap:10px}.grade,.heads li.head .grade,.h-text .grade{width:28px;min-width:28px;height:28px;padding:0 2px;border-radius:7px;font-size:8px}.owner-footer{padding:20px 0}.owner-contact{width:100%}.owner-contact-image{border-radius:10px}.owner-contact .owner-qr{right:9px;bottom:9px;padding:3px}}
