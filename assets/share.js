@@ -124,7 +124,7 @@ function open(id,btn){var it=ITEMS[id];if(!it)return;cur=it;opener=btn;
   document.documentElement.classList.add('sd-lock');
   if(it.png){shown(it);return;}
   load(it.cover,function(img){
-    load('/assets/owner-qr.png',function(ownerQr){var url;
+    load('/caijix/assets/owner-qr.png',function(ownerQr){var url;
       try{url=draw(it,img,ownerQr).toDataURL('image/png');}catch(e){url=draw(it,null,ownerQr).toDataURL('image/png');}   /* a tainted canvas: draw without the cover */
       it.png=url;if(cur===it)shown(it);
     });

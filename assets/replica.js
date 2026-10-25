@@ -8,7 +8,7 @@
   if(src){
     const data=JSON.parse(src.textContent);
     data.meta.host=location.host;
-    for(const item of data.items)item.url=location.origin+'/radar/'+data.meta.day+'/#'+item.id;
+    for(const item of data.items)item.url=location.origin+'/caijix/radar/'+data.meta.day+'/#'+item.id;
     src.textContent=JSON.stringify(data);
   }
   document.querySelectorAll('.s-media img').forEach(img=>{
